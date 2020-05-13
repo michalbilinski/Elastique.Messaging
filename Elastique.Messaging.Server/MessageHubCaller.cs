@@ -70,7 +70,7 @@ namespace Elastique.Messaging.Server
 
                 if (message is DataMessage<T> data)
                 {
-                    DataReceived?.Invoke(this, new DataReceivedEventArgs<T>(_tcpClient.Client.RemoteEndPoint, data));
+                    DataReceived?.Invoke(this, new DataReceivedEventArgs<T>(_tcpClient.Client.RemoteEndPoint, data.Data));
                 }
             }
         }

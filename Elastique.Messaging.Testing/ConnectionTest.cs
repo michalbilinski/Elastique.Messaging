@@ -61,7 +61,7 @@ namespace MB.Tcp.Testing
             server.Start();
             client.Connect(new IPEndPoint(IPAddress.Loopback, 12342));
 
-            server.DataReceived += ((sender, e) => { _messagesClientSendTest.Add(e.Message.Data); });
+            server.DataReceived += ((sender, e) => { _messagesClientSendTest.Add(e.Data); });
 
             client.Send("Message from client 1");
             client.Send("Message from client 2");
@@ -90,7 +90,7 @@ namespace MB.Tcp.Testing
             server.Start();
             client.Connect(new IPEndPoint(IPAddress.Loopback, 12343));
 
-            client.DataReceived += ((sender, e) => { _messagesServerSendTest.Add(e.Message.Data); });
+            client.DataReceived += ((sender, e) => { _messagesServerSendTest.Add(e.Data); });
 
             server.Send(server.Clients.First(), "Message from server 1");
             server.Send(server.Clients.First(), "Message from server 2");

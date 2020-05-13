@@ -124,7 +124,7 @@ namespace Elastique.Messaging.Client
 
                 if (message is DataMessage<T> data)
                 {
-                    DataReceived?.Invoke(this, new DataReceivedEventArgs<T>(ClientEndPoint, data));
+                    DataReceived?.Invoke(this, new DataReceivedEventArgs<T>(ClientEndPoint, data.Data));
                 }
             }
         }

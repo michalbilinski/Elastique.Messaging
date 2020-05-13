@@ -5,12 +5,12 @@ namespace Elastique.Messaging.Common.Events
 {
     public class DataReceivedEventArgs<T> : EventArgs
     {
-        public DataMessage<T> Message { get; private set; }
+        public T Data { get; private set; }
         public EndPoint Sender { get; private set; }
 
-        public DataReceivedEventArgs(EndPoint sender, DataMessage<T> message) : base()
+        public DataReceivedEventArgs(EndPoint sender, T data) : base()
         {
-            Message = message;
+            Data = data;
             Sender = sender;
         }
     }
