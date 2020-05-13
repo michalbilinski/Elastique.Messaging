@@ -9,6 +9,8 @@
     <Company>Elastique</Company>
     <Copyright></Copyright>
     <Description>Common library for simple TCP messaging used by client and server libraries.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/michalbilinski/Elastique.Messaging</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>

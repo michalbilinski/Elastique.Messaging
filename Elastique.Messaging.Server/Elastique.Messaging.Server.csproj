@@ -9,6 +9,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>client, server, communication, messaging, tcp</PackageTags>
     <Description>Server library for simple TCP messaging.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/michalbilinski/Elastique.Messaging</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
