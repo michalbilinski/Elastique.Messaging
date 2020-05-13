@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageTags>client, server, communication, messaging, tcp</PackageTags>
+    <RepositoryUrl>https://github.com/michalbilinski/Elastique.Messaging</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Authors>Michał Biliński</Authors>
+    <Company>Elastique</Company>
+    <Copyright></Copyright>
+    <Description>Common library for simple TCP messaging used by client and server libraries.</Description>
   </PropertyGroup>
 
 </Project>
