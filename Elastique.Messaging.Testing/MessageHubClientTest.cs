@@ -59,5 +59,28 @@ namespace MB.Tcp.Testing
 
             client.Connect(new IPEndPoint(IPAddress.Loopback, 12339));
         }
+
+        [TestMethod]
+        public void ClientReconnectShouldWork()
+        {
+            var client = new MessageHubClient<string>();
+            var server = new MessageHub<string>(new IPEndPoint(IPAddress.Loopback, 12337));
+            server.Start();
+
+            Assert.IsFalse(client.Connected);
+            
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12337));
+            client.Send("Test 1");
+            Assert.IsTrue(client.Connected);
+            
+            client.Disconnect();
+            Assert.IsFalse(client.Connected);
+
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12337));
+            client.Send("Test 2");
+            Assert.IsTrue(client.Connected);
+
+            client.Disconnect();
+        }
     }
 }
