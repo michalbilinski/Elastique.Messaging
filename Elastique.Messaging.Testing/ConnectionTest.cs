@@ -92,9 +92,9 @@ namespace MB.Tcp.Testing
 
             client.DataReceived += ((sender, e) => { _messagesServerSendTest.Add(e.Message.Data); });
 
-            server.Send(server.Clients.First(), new DataMessage<string>("Message from server 1"));
-            server.Send(server.Clients.First(), new DataMessage<string>("Message from server 2"));
-            server.Send(server.Clients.First(), new DataMessage<string>("Message from server 3"));
+            server.Send(server.Clients.First(), "Message from server 1");
+            server.Send(server.Clients.First(), "Message from server 2");
+            server.Send(server.Clients.First(), "Message from server 3");
 
             // Let's wait 300ms to make sure that the connection is established and servers sees the client.
             Thread.Sleep(500);

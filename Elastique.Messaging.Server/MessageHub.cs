@@ -67,7 +67,7 @@ namespace Elastique.Messaging.Server
             switch (e.Command)
             {
                 case ClientCommand.Connect:
-                    Send(peer.ClientEndPoint, new ServerCommandMessage(ServerCommand.ConnectionAccepted));
+                    SendCommand(peer.ClientEndPoint, ServerCommand.ConnectionAccepted);
                     ClientConnected?.Invoke(this, new ClientConnectedEventArgs(peer.ClientEndPoint));
                     break;
                 case ClientCommand.Disconnect:
@@ -110,9 +110,14 @@ namespace Elastique.Messaging.Server
             _tcpListener.Stop();
         }
 
-        public void Send(EndPoint clientEndPoint, Message message)
+        public void Send(EndPoint clientEndPoint, T data)
         {
-            _peers.Where(c => c.ClientEndPoint == clientEndPoint).ToList().ForEach(c => { c.Send(message); });
+            _peers.Where(c => c.ClientEndPoint == clientEndPoint).ToList().ForEach(c => { c.Send(new DataMessage<T>(data)); });
+        }
+
+        private void SendCommand(EndPoint clientEndPoint, ServerCommand command)
+        {
+            _peers.Where(c => c.ClientEndPoint == clientEndPoint).ToList().ForEach(c => { c.Send(new ServerCommandMessage(command)); });
         }
 
         private void OnClientConnecting(MessageHubCaller<T> mbPeer)
