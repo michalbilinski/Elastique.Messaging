@@ -11,6 +11,7 @@
     <Description>Server library for simple TCP messaging.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/michalbilinski/Elastique.Messaging</PackageProjectUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
