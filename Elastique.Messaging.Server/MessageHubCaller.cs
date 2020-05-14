@@ -60,7 +60,7 @@ namespace Elastique.Messaging.Server
 
             while (Connected)
             {
-                var message = _receiver.Receive(TimeSpan.Zero);
+                var message = _receiver.Receive();
 
                 if (message is ClientCommandMessage)
                 {

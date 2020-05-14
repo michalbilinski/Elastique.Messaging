@@ -19,17 +19,23 @@ namespace MB.Tcp.Testing
         [TestMethod]
         public void ConnectShouldSucceed()
         {
-            var client = new MessageHubClient<string>() { ConnectionTimeout = TimeSpan.FromSeconds(1) };
+            var client = new MessageHubClient<string>();
             var server = new MessageHub<string>(new IPEndPoint(IPAddress.Loopback, 12340));
             server.Start();
 
             Assert.IsFalse(client.Connected);
             Assert.AreEqual(0, server.ClientsCount);
 
-            client.Connect(new IPEndPoint(IPAddress.Loopback, 12340));
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12340), TimeSpan.FromSeconds(1));
 
             Assert.IsTrue(client.Connected);
-            Assert.AreEqual(1, server.ClientsCount);            
+            Assert.AreEqual(1, server.ClientsCount);
+
+            client.Disconnect();
+            Assert.IsFalse(client.Connected);
+
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12340));
+            Assert.IsTrue(client.Connected);
         }
 
         [TestMethod]
@@ -45,8 +51,8 @@ namespace MB.Tcp.Testing
             
             client.Disconnect();
 
-            // Let's wait 100ms to make sure that the connection is established and servers sees the client.
-            Thread.Sleep(100);
+            // Let's wait 200ms to make sure that the connection is established and servers sees the client.
+            Thread.Sleep(200);
 
             Assert.IsFalse(client.Connected);
             Assert.AreEqual(0, server.ClientsCount);
@@ -59,17 +65,17 @@ namespace MB.Tcp.Testing
             var client = new MessageHubClient<string>();
             
             server.Start();
-            client.Connect(new IPEndPoint(IPAddress.Loopback, 12342));
-
             server.DataReceived += ((sender, e) => { _messagesClientSendTest.Add(e.Data); });
+
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12342));            
 
             client.Send("Message from client 1");
             client.Send("Message from client 2");
             client.Send("Message from client 3");
             client.Send("Message from client 4");
 
-            // Let's wait 100ms to make sure that the messages arrived at the server.
-            Thread.Sleep(100);
+            // Let's wait 200ms to make sure that the messages arrived at the server.
+            Thread.Sleep(200);
 
             client.Disconnect();
             server.Stop();

@@ -27,12 +27,6 @@ namespace Elastique.Messaging.Client
         public EndPoint ServerEndPoint { get; set; }
 
         /// <summary>
-        /// Gets or sets the amount of time an MbClient will wait for server to accept the connection.
-        /// </summary>
-        public TimeSpan ConnectionTimeout { get; set; }
-
-
-        /// <summary>
         /// The event is raised when message from server is received.
         /// </summary>
         public event EventHandler<DataReceivedEventArgs<T>> DataReceived;
@@ -47,7 +41,6 @@ namespace Elastique.Messaging.Client
 
         public MessageHubClient(ISenderReceiverFactory senderReceiverFactory)
         {
-            ConnectionTimeout = TimeSpan.Zero;
             _senderReceiverFactory = senderReceiverFactory;
         }
 
@@ -58,23 +51,34 @@ namespace Elastique.Messaging.Client
 
         public void Connect(IPEndPoint remoteEndPoint)
         {
+            Connect(remoteEndPoint, TimeSpan.FromSeconds(30));
+        }
+
+        public void Connect(IPEndPoint remoteEndPoint, TimeSpan timeOut)
+        {
+            var tcpClient = new TcpClient();
+
             try
             {
-                var tcpClient = new TcpClient();
-                tcpClient.Connect(remoteEndPoint);
-                _sender = _senderReceiverFactory.CreateSender(tcpClient.GetStream());
-                _receiver = _senderReceiverFactory.CreateReceiver(tcpClient.GetStream());
-
-                ServerEndPoint = remoteEndPoint;
-                ClientEndPoint = tcpClient.Client.LocalEndPoint;
+                if (!tcpClient.ConnectAsync(remoteEndPoint.Address, remoteEndPoint.Port).Wait((int)timeOut.TotalMilliseconds))
+                {
+                    throw new ConnectionTimeoutException(remoteEndPoint);
+                }
             }
-            catch (SocketException exc)
+            catch (AggregateException exc)
             {
                 throw new ServerUnavailableException(remoteEndPoint, exc);
             }
 
+            _sender = _senderReceiverFactory.CreateSender(tcpClient.GetStream());
+            _receiver = _senderReceiverFactory.CreateReceiver(tcpClient.GetStream());
+
+            ServerEndPoint = remoteEndPoint;
+            ClientEndPoint = tcpClient.Client.LocalEndPoint;
+
+
             _sender.Send(new ClientCommandMessage(ClientCommand.Connect));
-            var response = (ServerCommandMessage)_receiver.Receive(ConnectionTimeout);
+            var response = (ServerCommandMessage)_receiver.Receive();
 
             if (response == null)
                 throw new UnexpectedMessageException(typeof(ServerCommandMessage), response);
@@ -114,7 +118,7 @@ namespace Elastique.Messaging.Client
                     throw new NoConnectionException();
                 }
 
-                var message = _receiver.Receive(TimeSpan.Zero);
+                var message = _receiver.Receive();
 
                 if (message is ServerCommandMessage)
                 {

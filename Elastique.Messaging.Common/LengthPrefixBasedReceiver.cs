@@ -17,7 +17,7 @@ namespace Elastique.Messaging.Common
             _stream = receiveStream;
         }
 
-        public Message Receive(TimeSpan timeout)
+        public Message Receive()
         {
             byte[] receivedData = null;
 
@@ -29,11 +29,6 @@ namespace Elastique.Messaging.Common
             var start = DateTime.Now;
             while (true)
             {
-                if (timeout != TimeSpan.Zero && DateTime.Now - start > timeout)
-                {
-                    throw new ReceiveTimeoutException();
-                }
-
                 if (_stream.DataAvailable)
                 {
                     var messageLength = ReceiveMessageLength();

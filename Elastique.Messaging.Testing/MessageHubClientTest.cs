@@ -47,17 +47,12 @@ namespace MB.Tcp.Testing
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ReceiveTimeoutException))]
-        public void ConnectionShouldTimeOut()
+        [ExpectedException(typeof(ConnectionTimeoutException))]
+        public void ConnectionShouldTimeOutWithin1s()
         {
-            var client = new MessageHubClient<string>() { ConnectionTimeout = TimeSpan.FromMilliseconds(0.001) };
-            var server = new MessageHub<string>(new IPEndPoint(IPAddress.Loopback, 12339));
-            server.Start();
-
-            Assert.AreEqual(TimeSpan.FromMilliseconds(0.001), client.ConnectionTimeout);
+            var client = new MessageHubClient<string>();
             Assert.IsFalse(client.Connected);
-
-            client.Connect(new IPEndPoint(IPAddress.Loopback, 12339));
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12339), TimeSpan.FromSeconds(1));
         }
 
         [TestMethod]
