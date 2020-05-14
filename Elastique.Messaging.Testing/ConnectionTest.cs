@@ -8,7 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 
-namespace MB.Tcp.Testing
+namespace Elastique.Messaging.Testing
 {
     [TestClass]
     public class ConnectionTest
@@ -44,11 +44,11 @@ namespace MB.Tcp.Testing
             var client = new MessageHubClient<string>();
             var server = new MessageHub<string>(new IPEndPoint(IPAddress.Loopback, 12341));
             server.Start();
-            client.Connect(new IPEndPoint(IPAddress.Loopback, 12341));            
-            
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12341));
+
             Assert.IsTrue(client.Connected);
             Assert.AreEqual(1, server.ClientsCount);
-            
+
             client.Disconnect();
 
             // Let's wait 200ms to make sure that the connection is established and servers sees the client.
@@ -63,11 +63,11 @@ namespace MB.Tcp.Testing
         {
             var server = new MessageHub<string>(new IPEndPoint(IPAddress.Any, 12342));
             var client = new MessageHubClient<string>();
-            
-            server.Start();
-            server.DataReceived += ((sender, e) => { _messagesClientSendTest.Add(e.Data); });
 
-            client.Connect(new IPEndPoint(IPAddress.Loopback, 12342));            
+            server.Start();
+            server.DataReceived += (sender, e) => { _messagesClientSendTest.Add(e.Data); };
+
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12342));
 
             client.Send("Message from client 1");
             client.Send("Message from client 2");
@@ -96,7 +96,7 @@ namespace MB.Tcp.Testing
             server.Start();
             client.Connect(new IPEndPoint(IPAddress.Loopback, 12343));
 
-            client.DataReceived += ((sender, e) => { _messagesServerSendTest.Add(e.Data); });
+            client.DataReceived += (sender, e) => { _messagesServerSendTest.Add(e.Data); };
 
             server.Send(server.Clients.First(), "Message from server 1");
             server.Send(server.Clients.First(), "Message from server 2");
@@ -130,8 +130,8 @@ namespace MB.Tcp.Testing
             client.Disconnect();
             server.Stop();
 
-            // Let's wait 100ms to make sure that the disconnect message is processed.
-            Thread.Sleep(100);
+            // Let's wait 500ms to make sure that the disconnect message is processed.
+            Thread.Sleep(500);
 
             Assert.IsFalse(client.Connected);
             Assert.AreEqual(0, server.ClientsCount);

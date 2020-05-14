@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net;
 
-namespace MB.Tcp.Testing
+namespace Elastique.Messaging.Testing
 {
     [TestClass]
     public class MessageHubClientTest
@@ -63,11 +63,11 @@ namespace MB.Tcp.Testing
             server.Start();
 
             Assert.IsFalse(client.Connected);
-            
+
             client.Connect(new IPEndPoint(IPAddress.Loopback, 12347));
             client.Send("Test 1");
             Assert.IsTrue(client.Connected);
-            
+
             client.Disconnect();
             Assert.IsFalse(client.Connected);
 

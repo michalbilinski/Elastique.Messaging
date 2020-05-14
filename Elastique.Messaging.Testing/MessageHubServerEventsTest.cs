@@ -5,7 +5,7 @@ using System;
 using System.Net;
 using System.Threading;
 
-namespace MB.Tcp.Testing
+namespace Elastique.Messaging.Testing
 {
     [TestClass]
     public class MessageHubServerEventsTest
@@ -25,15 +25,15 @@ namespace MB.Tcp.Testing
             _server.Start();
         }
 
-        [TestMethod]        
+        [TestMethod]
         public void EventsShouldBeInvokedAsExpected()
         {
             var client = new MessageHubClient<int>();
 
-            _server.ClientConnecting  += ((sender, e) => { _clientConnecting = DateTime.Now; });
-            _server.ClientConnected += ((sender, e) => { _clientConnected = DateTime.Now; });
-            _server.DataReceived += ((sender, e) => { _dataReceived = DateTime.Now; });
-            _server.ClientDisconnected += ((sender, e) => { _clientDisconnected = DateTime.Now; });
+            _server.ClientConnecting += (sender, e) => { _clientConnecting = DateTime.Now; };
+            _server.ClientConnected += (sender, e) => { _clientConnected = DateTime.Now; };
+            _server.DataReceived += (sender, e) => { _dataReceived = DateTime.Now; };
+            _server.ClientDisconnected += (sender, e) => { _clientDisconnected = DateTime.Now; };
 
             client.Connect(_endPoint);
             client.Send(1);
