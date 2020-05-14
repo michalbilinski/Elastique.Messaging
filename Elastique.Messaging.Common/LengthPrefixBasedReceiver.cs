@@ -2,6 +2,7 @@
 using Elastique.Messaging.Common.Exceptions;
 using System;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace Elastique.Messaging.Common
 {
@@ -45,6 +46,8 @@ namespace Elastique.Messaging.Common
                     var message = Message.FromByteArray(receivedData);
                     return message;
                 }
+
+                Thread.Sleep(200);
             }
         }
 
