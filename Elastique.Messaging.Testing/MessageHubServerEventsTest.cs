@@ -39,8 +39,8 @@ namespace MB.Tcp.Testing
             client.Send(1);
             client.Disconnect();
 
-            // Let's sleep 100ms to make sure that all events are invoked.
-            Thread.Sleep(100);
+            // Let's sleep 200ms to make sure that all events are invoked.
+            Thread.Sleep(200);
 
             Assert.AreNotEqual(DateTime.MinValue, _clientConnecting);
             Assert.AreNotEqual(DateTime.MinValue, _clientConnected);

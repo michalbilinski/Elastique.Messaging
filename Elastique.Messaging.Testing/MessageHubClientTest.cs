@@ -43,7 +43,7 @@ namespace MB.Tcp.Testing
         public void ConnectionShouldFailWhenNoServerListening()
         {
             var client = new MessageHubClient<string>();
-            client.Connect(new IPEndPoint(IPAddress.Loopback, 12338));
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12346));
         }
 
         [TestMethod]
@@ -52,26 +52,26 @@ namespace MB.Tcp.Testing
         {
             var client = new MessageHubClient<string>();
             Assert.IsFalse(client.Connected);
-            client.Connect(new IPEndPoint(IPAddress.Loopback, 12339), TimeSpan.FromSeconds(1));
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12346), TimeSpan.FromSeconds(1));
         }
 
         [TestMethod]
         public void ClientReconnectShouldWork()
         {
             var client = new MessageHubClient<string>();
-            var server = new MessageHub<string>(new IPEndPoint(IPAddress.Loopback, 12337));
+            var server = new MessageHub<string>(new IPEndPoint(IPAddress.Loopback, 12347));
             server.Start();
 
             Assert.IsFalse(client.Connected);
             
-            client.Connect(new IPEndPoint(IPAddress.Loopback, 12337));
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12347));
             client.Send("Test 1");
             Assert.IsTrue(client.Connected);
             
             client.Disconnect();
             Assert.IsFalse(client.Connected);
 
-            client.Connect(new IPEndPoint(IPAddress.Loopback, 12337));
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12347));
             client.Send("Test 2");
             Assert.IsTrue(client.Connected);
 

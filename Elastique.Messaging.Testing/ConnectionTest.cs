@@ -74,8 +74,8 @@ namespace MB.Tcp.Testing
             client.Send("Message from client 3");
             client.Send("Message from client 4");
 
-            // Let's wait 200ms to make sure that the messages arrived at the server.
-            Thread.Sleep(200);
+            // Let's wait 500ms to make sure that the messages arrived at the server.
+            Thread.Sleep(500);
 
             client.Disconnect();
             server.Stop();
@@ -102,7 +102,7 @@ namespace MB.Tcp.Testing
             server.Send(server.Clients.First(), "Message from server 2");
             server.Send(server.Clients.First(), "Message from server 3");
 
-            // Let's wait 300ms to make sure that the connection is established and servers sees the client.
+            // Let's wait 500ms to make sure that the connection is established and servers sees the client.
             Thread.Sleep(500);
 
             client.Disconnect();
@@ -118,11 +118,11 @@ namespace MB.Tcp.Testing
         [TestMethod]
         public void ServerUsingInjectedSenderReceiverFactoryShouldWorkTest()
         {
-            var server = new MessageHub<string>(new IPEndPoint(IPAddress.Any, 12342), new LengthPrefixBasedCommunicationFactory());
+            var server = new MessageHub<string>(new IPEndPoint(IPAddress.Any, 12344), new LengthPrefixBasedCommunicationFactory());
             var client = new MessageHubClient<string>();
 
             server.Start();
-            client.Connect(new IPEndPoint(IPAddress.Loopback, 12342));
+            client.Connect(new IPEndPoint(IPAddress.Loopback, 12344));
 
             Assert.IsTrue(client.Connected);
             Assert.AreEqual(1, server.ClientsCount);
